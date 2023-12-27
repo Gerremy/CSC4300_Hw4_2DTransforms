@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Canvas Transformations</title>
+
+
+<script>
+    var canvas;         // DOM object corresponding to the canvas
+    var graphics;       // 2D graphics context for drawing on the canvas
+    var angle = 0.1;    // rotate car by this angle each time
+    var radius = 150;
+    var angle2 = 0.1;
+    var radius2 = 15;
+
+    // Draw a square of side 2 centered at (0,0) - subject to transformations
+    function fillSquare(color) {
+        graphics.fillStyle = color;
+        // Do NOT change the arguments to fillRect
+        graphics.fillRect(-1, -1, 2, 2);
+    }
+
+    // Draw a circle of radius 1 centered at (0,0) - subject to transformations
+    function fillCircle(color) {
+        graphics.beginPath();
+        // Do NOT change the arguments to arc
+        graphics.arc(0,0,1,0,2*Math.PI,false);
+        graphics.fillStyle = color;
+        graphics.fill();
+    }
+
+    function drawCar() {
+        // these represent scale factors (half the actual sizes)
+        var bodyX = 10, bodyY = 4;  // body is 20 x 8 pixels
+        var topX = 4, topY = 2;     // top is 8 x 4 pixels
+        var wheelR = 3;             // wheel radius is 3 pixels
+
+        // TODO: draw car using calls to fillSquare and fillCircle
+        //       use the variables defined above (not numeric constants) 
+        //       use transformations to create proper shapes  
+        //       use save/restore before/after drawing each part
+
+        
+        // draw body
+        graphics.save();
+        graphics.scale(bodyX, bodyY);
+        fillSquare("lightblue");
+        graphics.restore();
+
+        // draw top
+        graphics.save();
+        graphics.translate(-4, -6);
+        graphics.scale(topX, topY);
+        fillSquare("orange");
+        graphics.restore();
+
+        // draw wheel
+        graphics.save();
+        graphics.translate(-5, 4);
+        graphics.scale(wheelR, wheelR);
+        fillCircle("lightyellow");
+        graphics.restore();
+
+        // draw wheel
+        graphics.save();
+        graphics.translate(5, 4);
+        graphics.scale(wheelR, wheelR);
+        fillCircle("lightyellow");
+        graphics.restore();
+
+    }
+
+    function drawPerson() {
+        // these represent scale factors (half the actual sizes)
+        var bodyX = 2, bodyY = 6;  // body is 20 x 8 pixels
+
+        var headR = 3;
+
+        var legX = 1, legY = 2;
+
+        var armX = 1, armY = 4;
+        
+        // draw body
+        graphics.save();
+        graphics.rotate(Math.PI/2);
+        graphics.scale(bodyX, bodyY);
+        fillSquare("lightgreen");
+        graphics.restore();
+
+        // draw head
+        graphics.save();
+        graphics.translate(-6, 0);
+        graphics.rotate(Math.PI/2);
+        graphics.scale(headR, headR);
+        fillCircle("gold");
+        graphics.restore();
+
+        // draw arm
+        graphics.save();
+        graphics.translate(1, -2);
+        graphics.rotate(3*Math.PI/4);
+        graphics.scale(armX, armY);
+        fillSquare("lightgreen");
+        graphics.restore();
+
+        // draw arm
+        graphics.save();
+        graphics.translate(1, 2);
+        graphics.rotate(-3*(Math.PI/4));
+        graphics.scale(armX, armY);
+        fillSquare("lightgreen");
+        graphics.restore();
+
+        // draw leg
+        graphics.save();
+        graphics.translate(6, -1.5);
+        graphics.rotate(Math.PI/2);
+        graphics.scale(legX, legY);
+        fillSquare("black");
+        graphics.restore();
+
+        // draw leg
+        graphics.save();
+        graphics.translate(6, 1.5);
+        graphics.rotate(Math.PI/2);
+        graphics.scale(legX, legY);
+        fillSquare("black");
+        graphics.restore();
+
+    }
+
+    function drawCircles() {
+        
+        //graphics.clearRect(0, 0, canvas.width, canvas.height);
+
+        // these represent scale factors (half the actual sizes)
+        var circle1R = 2;  // body is 20 x 8 pixels
+
+        var circle2R = 4;
+
+        var circle3R = 6;
+        
+        //draw circle 1
+        graphics.save();
+        graphics.translate(-.5*circle3R, .5*circle3R);
+        graphics.rotate(angle2);
+        graphics.translate(-radius2, 0);
+        graphics.scale(circle1R, circle1R);
+        fillCircle("gray");
+        graphics.restore();
+
+        //draw circle 2
+        graphics.save();
+        graphics.translate(.5*circle3R, -.5*circle3R);
+        graphics.rotate(angle2);
+        graphics.translate(0, -radius2);
+        graphics.scale(circle2R, circle2R);
+        fillCircle("salmon");
+        graphics.restore();
+
+        //draw circle3
+        graphics.save();
+        graphics.rotate(angle2);
+        graphics.scale(circle3R, circle3R);
+        fillCircle("lavender");
+        graphics.restore();
+
+        angle2 += 0.1
+
+    }
+
+    function draw()
+    {
+        // TODO: write code 
+
+        graphics.clearRect(0, 0, canvas.width, canvas.height);
+
+        graphics.save();
+        graphics.translate(canvas.width/2, canvas.height/2);
+        graphics.scale(radius, radius);
+        fillCircle("lightpink");
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(canvas.width/2, canvas.height/2);
+        //graphics.translate(canvas.width/2, ((canvas.height/2) - radius));
+        graphics.rotate(angle);
+        graphics.translate(0, -radius); 
+        graphics.scale(3, 3);
+        drawCar();
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(canvas.width/2, canvas.height/2);
+        graphics.rotate(angle);
+        graphics.translate(-radius, 0);
+        graphics.scale(3, 3);
+        drawPerson();
+        graphics.restore();
+
+        graphics.save();
+        graphics.translate(canvas.width/2, canvas.height/2);
+        graphics.rotate(angle);
+        graphics.translate(0, radius);
+        graphics.scale(3, 3);
+        drawCircles();
+        graphics.restore();
+
+        angle += 0.1
+
+    }
+
+    function main() {
+        canvas = document.getElementById("myCanvas");
+        graphics = canvas.getContext("2d");
+        //draw();  // draw something on the canvas
+        var timer = setInterval(draw, 150);
+
+        // TODO: animation part
+    }
+</script>
+
+
+</head>
+<body onload="main()">
+    <canvas id="myCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+</body>
+</html>
